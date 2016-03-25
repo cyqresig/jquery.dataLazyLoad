@@ -16,3 +16,32 @@
 *   打开浏览器, 输入localhost:9090/demo/datalazyload.html
 
 ##  [查看在线示例](http://www.vanadis.cn/demo/datalazyload.html)
+
+## 配置项
+
+*   `threshold`: 判断元素是否在范围内的额外边距, 默认为0
+*   `jsonpCallback`: jsonp文件中使用的function名称
+*   `load`: jsonp数据加载至页面上后执行的自定义方法
+*   `container`: 包含懒加载元素的基容器
+*   `dataKeyAttr`: jsonp数据定义的获取用的key, 需要与jsonp数据中返回的object对象中的key对应, 默认为'content'
+*   `dataCacheKeyAttr`: 与定义在页面元素上的data-*对应, 用于指定缓存不同数据至本地的key, 默认为'cache-key'
+*   `dataSrcAttr`: 与定义在页面元素上的data-*对应, 用于指定获取jsonp数据的相对路由
+*   `dataSrcDomain`: 用于额外指定获取jsonp数据的路由的前半部分, 默认为''
+*   `throttleInterval`: 用于指定懒加载事件触发的最小间隔, 默认为10(ms)
+
+## 简单使用
+
+```javascript
+var DataLazyLoad = require('./../src/datalazyload');
+
+var instance = new DataLazyLoad({
+  threshold: 20,
+  jsonpCallback: 'loadLazyData',
+  load: function($element) {
+    $element.find('script').remove();
+  }
+
+});
+
+instance.init($('.lazyload'));
+```
