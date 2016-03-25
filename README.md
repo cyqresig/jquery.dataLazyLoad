@@ -31,6 +31,26 @@
 
 ## 简单使用
 
+```html
+<div class="container center-block">
+    <div class="lazyload" data-src="jsonp/floor-1.js" data-cache-key="floor-1">
+        loading...
+    </div>
+    <div class="lazyload" data-src="jsonp/floor-2.js" data-cache-key="floor-2">
+        loading...
+    </div>
+    <div class="lazyload" data-src="jsonp/floor-3.js" data-cache-key="floor-3">
+        loading...
+    </div>
+    <div class="lazyload" data-src="jsonp/floor-4.js" data-cache-key="floor-4">
+        loading...
+    </div>
+    <div class="lazyload" data-src="jsonp/floor-5.js" data-cache-key="floor-5">
+        loading...
+    </div>
+</div>
+```
+
 ```javascript
 var DataLazyLoad = require('./../src/datalazyload');
 
