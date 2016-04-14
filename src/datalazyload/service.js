@@ -76,8 +76,9 @@ var service = {
 			}
 		});
 		$.each(loadedElements, function(index, $element) {
-			if(~$.inArray($element, dataLazyLoadElements)) {
-				dataLazyLoadElements.splice(dataLazyLoadElements.indexOf($element), 1);
+			var index = $.inArray($element, dataLazyLoadElements);
+			if(~index) {
+				dataLazyLoadElements.splice(index, 1);
 			}
 		});
 	},
