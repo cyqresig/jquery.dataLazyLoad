@@ -112,8 +112,8 @@ gulp.task('webpack:dev-server', function () {
         //},
 
         // webpack-dev-middleware options
-        //quiet: false,
-        //noInfo: false,
+        quiet: false,
+        noInfo: true,
         lazy: false,
         //filename: "bundle.js",
         //watchOptions: {

@@ -14,6 +14,7 @@ var options = {
 	dataKeyAttr: 'content',
 	dataSrcDomain: '',
 	dataCacheKeyAttr: 'cache-key',
+	dataCacheTimeKeyAttr: 'cache-time',
 	dataSrcAttr: 'src',
 	load: null,									//数据加载并替换容器内容后触发, 可额外定义替换容器后的操作
 	jsonpCallBack: null,				//[必填]jquery返回jsonp时指定的jsonp callback

@@ -13,13 +13,13 @@ var handler = {
 
 	onScrollHandler: function() {
 
-		service.throttleUpdate(this._attrs.dataLazyLoadElements, this._options);
+		service.throttleUpdate(this._attrs.dataLazyLoadElements, this._options, this._attrs);
 
 	},
 
 	onResizeHanlder: function() {
 
-		service.throttleUpdate(this._attrs.dataLazyLoadElements, this._options);
+		service.throttleUpdate(this._attrs.dataLazyLoadElements, this._options, this._attrs);
 
 	}
 

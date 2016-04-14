@@ -8,7 +8,8 @@
 
 var attrs = {
 
-  dataLazyLoadElements: []
+  dataLazyLoadElements: [],
+  dataCacheContentKey: 'dataCacheContent'
 
 };
 

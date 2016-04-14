@@ -37,6 +37,11 @@ module.exports =
         //    //chunks: entry,
         //    //minChunks: entry.length
         //}),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': '"development"'
+        }),
+        new webpack.NoErrorsPlugin(),
+        new webpack.optimize.OccurenceOrderPlugin()
     ],
     module: {
         loaders: [

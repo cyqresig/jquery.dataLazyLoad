@@ -66,12 +66,12 @@ var service = {
 			!this.belowthefold($element, options) && !this.abovethetop($element, options);
 	},
 
-	update: function(dataLazyLoadElements, options) {
+	update: function(dataLazyLoadElements, options, attrs) {
 		var that = this,
 			  loadedElements = [];
 		$.each(dataLazyLoadElements, function(index, $element) {
 			if(that.inviewport($element, options)) {
-				that.loadData($element, options);
+				that.loadData($element, options, attrs);
 				loadedElements.push($element);
 			}
 		});
@@ -82,7 +82,7 @@ var service = {
 		});
 	},
 
-	throttleUpdate: function(dataLazyLoadElements, options) {
+	throttleUpdate: function(dataLazyLoadElements, options, attrs) {
 		var that = this;
 
 		if(timer) {
@@ -102,27 +102,62 @@ var service = {
 
 			}
 
-			that.update(dataLazyLoadElements, options);
+			that.update(dataLazyLoadElements, options, attrs);
 
 		}, options.interval);
 
 	},
 
-	loadData: function($element, options) {
-		var dataCacheKey = $element.attr('data-' + options.dataCacheKeyAttr);
+	loadData: function($element, options, attrs) {
+		var cacheTime,
+			  dataCacheTime = $element.attr('data-' + options.dataCacheTimeKeyAttr),
+			  dataCacheKey = $element.attr('data-' + options.dataCacheKeyAttr),
+				cacheContent = JSON.parse(localStorage.getItem(dataCacheKey));
+		//判断本地缓存数据是否存在
+		if(cacheContent != null) {
+
+			 cacheTime = cacheContent.dataCacheTime;
+			//utils.debug('cacheContent = ');
+			//utils.debug(cacheContent);
+			//utils.debug('cacheTime = ' + cacheTime);
+			//utils.debug('dataCacheTime = ' + dataCacheTime);
+			//缓存时间更新, 重新请求远程数据
+			if(cacheTime != dataCacheTime) {
+					//utils.debug('缓存时间更新, 重新请求远程数据');
+					this.loadJsonpData($element, options, dataCacheKey, dataCacheTime);
+			}
+			//缓存时间未更新, 直接使用本地缓存替换内容
+			else {
+				//utils.debug('缓存时间未更新, 直接使用本地缓存替换内容');
+				if(cacheContent.dataCacheTime) {
+					 this.replaceContent($element, cacheContent.dataCacheContent, options.load);
+				}
+			}
+		}
+		//本地缓存数据不存在
+		else {
+			//utils.debug('本地缓存数据不存在');
+			this.loadJsonpData($element, options, dataCacheKey, dataCacheTime);
+		}
+	},
+
+	loadJsonpData: function($element, options, dataCacheKey, dataCacheTime) {
 		$.jsonp({
 			url: options.dataSrcDomain + $element.attr('data-' + options.dataSrcAttr),
 			callback: options.jsonpCallback,
-			success: $.proxy(this.loadDataSuccess, this, options.dataKeyAttr, dataCacheKey, $element, options.load),
+			success: $.proxy(this.loadDataSuccess, this, options.dataKeyAttr, dataCacheTime, dataCacheKey, $element, options.load),
 			error: $.proxy(this.loadDataError, this, dataCacheKey, $element, options.load)
 		});
 	},
 
-	loadDataSuccess: function(dataKey, dataCacheKey, $element, loadFn, data, textStatus, jqXHR) {
+	loadDataSuccess: function(dataKey, dataCacheTime, dataCacheKey, $element, loadFn, data, textStatus, jqXHR) {
 		//判断数据是否有值, 如有值, 缓存数据至本地
 		var content = data[dataKey];
 		if(content) {
-			localStorage.setItem(dataCacheKey, content);
+			localStorage.setItem(dataCacheKey, JSON.stringify({
+				dataCacheTime: dataCacheTime,
+				dataCacheContent: content
+			}));
 			this.replaceContent($element, content, loadFn);
 		}
 	},
@@ -130,9 +165,9 @@ var service = {
 	loadDataError: function(dataCacheKey, $element, loadFn, xhr, textStatus, errorThrown) {
 		utils.debug(textStatus);
 		//判断本地缓存数据是否存在, 如存在, 取缓存数据
-		var cacheContent = localStorage.getItem(dataCacheKey)
+		var cacheContent = JSON.parse(localStorage.getItem(dataCacheKey));
 		if(cacheContent != null) {
-			this.replaceContent($element, cacheContent, loadFn);
+			this.replaceContent($element, cacheContent.dataCacheContent, loadFn);
 		}
 	},
 
