@@ -89,19 +89,12 @@ var service = {
 		if(timer) {
 			clearTimeout(timer);
 		}
+
+		if(dataLazyLoadElements.length == 0) {
+			return;
+		}
+
 		timer = setTimeout(function() {
-
-			if(dataLazyLoadElements.length == 0) {
-
-				//$.each(events.off, function(eventType, unBindEvent) {
-        //
-				//	unBindEvent.call(that);
-        //
-				//});
-
-				return;
-
-			}
 
 			that.update(dataLazyLoadElements, options, attrs);
 
