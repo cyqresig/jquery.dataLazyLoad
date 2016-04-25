@@ -93,11 +93,11 @@ var service = {
 
 			if(dataLazyLoadElements.length == 0) {
 
-				$.each(events.off, function(eventType, unBindEvent) {
-
-					unBindEvent.call(that);
-
-				});
+				//$.each(events.off, function(eventType, unBindEvent) {
+        //
+				//	unBindEvent.call(that);
+        //
+				//});
 
 				return;
 
@@ -105,7 +105,7 @@ var service = {
 
 			that.update(dataLazyLoadElements, options, attrs);
 
-		}, options.interval);
+		}, options.throttleInterval);
 
 	},
 
@@ -144,7 +144,7 @@ var service = {
 
 	loadJsonpData: function($element, options, dataCacheKey, dataCacheTime) {
 		$.jsonp({
-			url: options.dataSrcDomain + $element.attr('data-' + options.dataSrcAttr),
+			url: options.dataSrcDomain + $element.attr('data-' + options.dataSrcAttr) + '?t=' + $element.attr('data-' + options.dataCacheTimeKeyAttr),
 			callback: options.jsonpCallback,
 			success: $.proxy(this.loadDataSuccess, this, options.dataKeyAttr, dataCacheTime, dataCacheKey, $element, options.load),
 			error: $.proxy(this.loadDataError, this, dataCacheKey, $element, options.load)

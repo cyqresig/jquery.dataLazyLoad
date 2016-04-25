@@ -40,6 +40,12 @@ DataLazyLoad.prototype = {
 
 		var that = this;
 
+		if($dataLazyLoadElements.length == 0) {
+
+			return;
+
+		}
+
 		//每次初始化时, 更新要lazyload的元素
 		$.each($dataLazyLoadElements, function(index, element) {
 
